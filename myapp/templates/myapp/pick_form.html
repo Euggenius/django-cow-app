@@ -1,0 +1,327 @@
+{% extends 'myapp/base.html' %}
+{% load custom_filters %}
+
+{% block content %}
+<div class="container">
+    <h2 class="title">Выберите 5 быков</h2>
+    <div class="counter">Выбрано: <span id="selected-counter">{{ selected_count }}</span>/5</div>
+    
+    <form method="post" id="bulls-form">
+        {% csrf_token %}
+        
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        
+        <div class="bulls-grid">
+            {% for bull in sorted_bulls %}
+            <div class="bull-card {% if bull.id|stringformat:'s' in selected_bulls %}selected{% endif %}" 
+                 data-bull-id="{{ bull.id }}">
+                <input type="checkbox" 
+                       name="bull_id" 
+                       value="{{ bull.id }}"
+                       {% if bull.id|stringformat:'s' in selected_bulls %}checked{% endif %}
+                       class="bull-checkbox">
+                
+                <div class="checkmark">
+                    <div class="check-icon">✓</div>
+                </div>
+                
+                <h3 class="bull-name">{{ bull.registered_name }}</h3>
+                
+                <div class="traits">
+                    {% for trait in original_order|slice:":3" %}
+                    <div class="trait-row">
+                        <span class="trait-label">{{ trait|slice:"4:" }}</span>
+                        <span class="trait-value">{{ bull|get_item:trait|floatformat:2 }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% empty %}
+            <p class="no-bulls">Нет доступных быков для выбора</p>
+            {% endfor %}
+        </div>
+        
+        <div class="controls">
+            <button type="submit" name="reset" value="1" class="btn reset-btn">Сбросить выбор</button>
+            <button type="submit" 
+                    name="action" 
+                    value="plot" 
+                    id="submit-btn" 
+                    class="btn submit-btn" 
+                    {% if selected_count != 5 %}disabled{% endif %}>
+                Построить графики
+            </button>
+        </div>
+    </form>
+</div>
+
+<style>
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 30px 20px;
+    }
+
+    .title {
+        text-align: center;
+        color: #2c3e50;
+        font-size: 2rem;
+        margin-bottom: 15px;
+    }
+
+    .counter {
+        text-align: center;
+        font-size: 1.2rem;
+        color: #7f8c8d;
+        margin-bottom: 30px;
+    }
+
+    .bulls-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 25px;
+        margin: 0 auto;
+    }
+
+    .bull-card {
+        position: relative;
+        background: #ffffff;
+        border-radius: 15px;
+        padding: 20px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+        overflow: hidden;
+    }
+
+    .bull-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+
+    .bull-card.selected {
+        border: 2px solid #4CAF50;
+        order: -1;
+        animation: cardSelect 0.4s ease-out;
+    }
+
+    @keyframes cardSelect {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
+    }
+
+    .bull-checkbox {
+        position: absolute;
+        opacity: 0;
+        height: 0;
+        width: 0;
+    }
+
+    .checkmark {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 28px;
+        height: 28px;
+        background: #4CAF50;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transform: scale(0);
+        transition: all 0.3s ease;
+    }
+
+    .bull-card.selected .checkmark {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    .check-icon {
+        color: white;
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    .bull-name {
+        margin: 0 0 15px 0;
+        color: #34495e;
+        font-size: 1.3rem;
+        font-weight: 600;
+    }
+
+    .traits {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .trait-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .trait-label {
+        color: #7f8c8d;
+        font-size: 0.95rem;
+    }
+
+    .trait-value {
+        font-weight: 600;
+        color: #2c3e50;
+        font-size: 1.1rem;
+    }
+
+    .controls {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin-top: 40px;
+    }
+
+    .btn {
+        padding: 12px 30px;
+        border-radius: 8px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: none;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .reset-btn {
+        background: #e74c3c;
+        color: white;
+    }
+
+    .submit-btn {
+        background: #4CAF50;
+        color: white;
+    }
+
+    .submit-btn:disabled {
+        background: #bdc3c7;
+        cursor: not-allowed;
+        opacity: 0.7;
+    }
+
+    .no-bulls {
+        text-align: center;
+        grid-column: 1 / -1;
+        color: #95a5a6;
+        font-size: 1.2rem;
+        padding: 30px;
+    }
+
+    .alert {
+        padding: 15px;
+        margin-bottom: 25px;
+        border-radius: 8px;
+        text-align: center;
+    }
+
+    .alert-error {
+        background: #ffebee;
+        color: #c62828;
+    }
+
+    .loader {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 3px solid #f3f3f3;
+        border-radius: 50%;
+        border-top-color: #4CAF50;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('bulls-form');
+    const bullCards = document.querySelectorAll('.bull-card');
+    const counter = document.getElementById('selected-counter');
+    const submitBtn = document.getElementById('submit-btn');
+    const resetBtn = document.getElementById('reset-btn');
+
+    let selectedCount = parseInt(counter.textContent) || 0;
+
+    bullCards.forEach(card => {
+        card.addEventListener('click', function(e) {
+            const checkbox = this.querySelector('.bull-checkbox');
+            const wasChecked = checkbox.checked;
+            
+            if (!wasChecked && selectedCount >= 5) return;
+            
+            checkbox.checked = !wasChecked;
+            this.classList.toggle('selected', checkbox.checked);
+            
+            selectedCount += checkbox.checked ? 1 : -1;
+            counter.textContent = selectedCount;
+            submitBtn.disabled = selectedCount !== 5;
+
+            if (checkbox.checked) {
+                this.style.transform = 'scale(1.05)';
+                
+                const selectedCards = Array.from(this.parentNode.children)
+                    .filter(child => child.classList.contains('selected'));
+                
+                const lastSelected = selectedCards[selectedCards.length - 1];
+                
+                setTimeout(() => {
+                    this.style.transform = '';
+                
+                    if (lastSelected) {
+                        lastSelected.insertAdjacentElement('afterend', this);
+                    } else {
+                        this.parentNode.prepend(this);
+                    }
+                }, 300);
+            }
+        });
+    });
+
+    resetBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        bullCards.forEach(card => {
+            card.classList.remove('selected');
+            card.querySelector('.bull-checkbox').checked = false;
+        });
+        selectedCount = 0;
+        counter.textContent = selectedCount;
+        submitBtn.disabled = true;
+    });
+
+    form.addEventListener('submit', function(e) {
+        const isPlotAction = e.submitter?.value === 'plot';
+        
+        if (isPlotAction) {
+            if (selectedCount !== 5) {
+                e.preventDefault();
+                alert('Пожалуйста, выберите ровно 5 быков');
+            } else {
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<div class="loader"></div>';
+            }
+        }
+    });
+});
+</script>
+{% endblock %}

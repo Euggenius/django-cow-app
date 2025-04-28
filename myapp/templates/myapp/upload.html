@@ -1,0 +1,70 @@
+{% extends 'myapp/base.html' %}
+{% block title %}Загрузить данные стада{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">Загрузить данные стада</h1>
+    
+    <div class="card mb-4">
+        <div class="card-header bg-info text-white">
+            <h5 class="mb-0">Требования к файлу</h5>
+        </div>
+        <div class="card-body">
+            <h6>Формат файла:</h6>
+            <ul>
+                <li>CSV файл с разделителями-запятыми</li>
+                <li>Кодировка: UTF-8</li>
+                <li>Максимальный размер: 10MB</li>
+            </ul>
+            
+            <h6>Обязательные колонки:</h6>
+            <ul>
+                <li><strong>Инвентарный номер</strong> - уникальный номер коровы</li>
+                <li><strong>Идентификац.№ предка - O</strong> - ID отца</li>
+                <li><strong>Идентификац.№ предка - OM</strong> - ID деда по материнской линии</li>
+                <li><strong>Идентификац.№ предка - OMM</strong> - ID прадеда (отца матери матери)</li>
+            </ul>
+            
+            <h6>Пример структуры файла:</h6>
+            <pre class="bg-light p-2">
+Инвентарный номер,Идентификац.№ предка - O,Идентификац.№ предка - OM,Идентификац.№ предка - OMM
+12345,BULL001,BULL002,BULL003
+67890,BULL004,BULL005,BULL006
+            </pre>
+            
+            <div class="alert alert-warning">
+                <strong>Важно!</strong> Коровы, чьи предки отсутствуют в базе данных быков, будут проигнорированы при обработке.
+            </div>
+        </div>
+    </div>
+    
+    {% if messages %}
+    <div class="alert alert-info mb-4">
+        <ul class="mb-0">
+        {% for msg in messages %}
+            <li class="{% if msg.tags %}{{ msg.tags }}{% endif %}">{{ msg }}</li>
+        {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+    
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">Загрузка файла</h5>
+        </div>
+        <div class="card-body">
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form-group mb-3">
+                    {{ form.as_p }}
+                </div>
+                <button type="submit" class="btn btn-primary">Загрузить данные</button>
+            </form>
+        </div>
+    </div>
+    
+    <div class="mt-3">
+        <a href="{% url 'index' %}" class="btn btn-secondary">&larr; На главную</a>
+    </div>
+</div>
+{% endblock %}

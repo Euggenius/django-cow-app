@@ -1,0 +1,11 @@
+{% extends 'myapp/base.html' %}
+{% block title %}Распределение PTA по стаду{% endblock %}
+
+{% block content %}
+<h1>Распределение PTA по стаду</h1>
+<div>
+    {{ fig|safe }}
+</div>
+<p><a href="{% url 'sort_bulls' %}">Назад к выбору PTA</a></p>
+<p><a href="{% url 'index' %}">На главную</a></p>
+{% endblock %}

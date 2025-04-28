@@ -1,0 +1,525 @@
+{% extends 'myapp/base.html' %}
+
+{% block title %}Выбор PTA приоритетов{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h1 class="header">Выбор PTA приоритетов</h1>
+  
+  <form method="POST">
+    {% csrf_token %}
+    <div class="themes-container">
+      <div class="theme-section">
+        <button type="button" class="theme-header">
+          Продуктивность и удойность <span class="arrow">▼</span>
+        </button>
+        <ul class="options-list">
+          <li class="option-item" data-priority="0" data-value="pta_milk">
+            <div class="option-content">
+              <span class="label">Milk ↑</span>
+              <span class="missing">({{ missing_counts.pta_milk }})</span>
+              <span class="priority"></span>
+            </div>
+            <div class="option-controls">
+              <button type="button" class="priority-btn">+</button>
+              <input type="number" class="threshold" placeholder="Порог">
+            </div>
+          </li>
+          <li class="option-item" data-priority="0" data-value="pta_fat">
+            <div class="option-content">
+              <span class="label">Fat ↑</span>
+              <span class="missing">({{ missing_counts.pta_fat }})</span>
+              <span class="priority"></span>
+            </div>
+            <div class="option-controls">
+              <button type="button" class="priority-btn">+</button>
+              <input type="number" class="threshold" placeholder="Порог">
+            </div>
+          </li>
+          <li class="option-item" data-priority="0" data-value="pta_protein">
+            <div class="option-content">
+              <span class="label">Protein ↑</span>
+              <span class="missing">({{ missing_counts.pta_protein }})</span>
+              <span class="priority"></span>
+            </div>
+            <div class="option-controls">
+              <button type="button" class="priority-btn">+</button>
+              <input type="number" class="threshold" placeholder="Порог">
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="theme-section">
+        <button type="button" class="theme-header">
+          Кормовая эффективность <span class="arrow">▼</span>
+        </button>
+        <ul class="options-list">
+          <li class="option-item" data-priority="0" data-value="pta_feed_saved">
+            <div class="option-content">
+              <span class="label">Feed Saved ↑</span>
+              <span class="missing">({{ missing_counts.pta_feed_saved }})</span>
+              <span class="priority"></span>
+            </div>
+            <div class="option-controls">
+              <button type="button" class="priority-btn">+</button>
+              <input type="number" class="threshold" placeholder="Порог">
+            </div>
+          </li>
+          <li class="option-item" data-priority="0" data-value="pta_residual_feed_intake">
+            <div class="option-content">
+              <span class="label">Residual Feed Intake ↓</span>
+              <span class="missing">({{ missing_counts.pta_residual_feed_intake }})</span>
+              <span class="priority"></span>
+            </div>
+            <div class="option-controls">
+              <button type="button" class="priority-btn">+</button>
+              <input type="number" class="threshold" placeholder="Порог">
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="theme-section">
+        <button type="button" class="theme-header">
+          Долговечность и здоровье <span class="arrow">▼</span>
+        </button>
+        <ul class="options-list">
+          <li class="option-item" data-priority="0" data-value="pta_productive_life">
+            <div class="option-content">
+              <span class="label">Productive Life ↑</span>
+              <span class="missing">({{ missing_counts.pta_productive_life }})</span>
+              <span class="priority"></span>
+            </div>
+            <div class="option-controls">
+              <button type="button" class="priority-btn">+</button>
+              <input type="number" class="threshold" placeholder="Порог">
+            </div>
+          </li>
+          <li class="option-item" data-priority="0" data-value="pta_scs">
+            <div class="option-content">
+              <span class="label">SCS ↓</span>
+              <span class="missing">({{ missing_counts.pta_scs }})</span>
+              <span class="priority"></span>
+            </div>
+            <div class="option-controls">
+              <button type="button" class="priority-btn">+</button>
+              <input type="number" class="threshold" placeholder="Порог">
+            </div>
+          </li>
+          <li class="option-item" data-priority="0" data-value="pta_milk_fever">
+            <div class="option-content">
+              <span class="label">Milk Fever ↓</span>
+              <span class="missing">({{ missing_counts.pta_milk_fever }})</span>
+              <span class="priority"></span>
+            </div>
+            <div class="option-controls">
+              <button type="button" class="priority-btn">+</button>
+              <input type="number" class="threshold" placeholder="Порог">
+            </div>
+          </li>
+          <li class="option-item" data-priority="0" data-value="pta_displaced_abomasum">
+            <div class="option-content">
+              <span class="label">Displaced Abomasum ↓</span>
+              <span class="missing">({{ missing_counts.pta_displaced_abomasum }})</span>
+              <span class="priority"></span>
+            </div>
+            <div class="option-controls">
+              <button type="button" class="priority-btn">+</button>
+              <input type="number" class="threshold" placeholder="Порог">
+            </div>
+          </li>
+          <li class="option-item" data-priority="0" data-value="pta_ketosis">
+            <div class="option-content">
+              <span class="label">Ketosis ↓</span>
+              <span class="missing">({{ missing_counts.pta_ketosis }})</span>
+              <span class="priority"></span>
+            </div>
+            <div class="option-controls">
+              <button type="button" class="priority-btn">+</button>
+              <input type="number" class="threshold" placeholder="Порог">
+            </div>
+          </li>
+          <li class="option-item" data-priority="0" data-value="pta_mastitis">
+            <div class="option-content">
+              <span class="label">Mastitis ↓</span>
+              <span class="missing">({{ missing_counts.pta_mastitis }})</span>
+              <span class="priority"></span>
+            </div>
+            <div class="option-controls">
+              <button type="button" class="priority-btn">+</button>
+              <input type="number" class="threshold" placeholder="Порог">
+            </div>
+          </li>
+          <li class="option-item" data-priority="0" data-value="pta_metritis">
+            <div class="option-content">
+              <span class="label">Metritis ↓</span>
+              <span class="missing">({{ missing_counts.pta_metritis }})</span>
+              <span class="priority"></span>
+            </div>
+            <div class="option-controls">
+              <button type="button" class="priority-btn">+</button>
+              <input type="number" class="threshold" placeholder="Порог">
+            </div>
+          </li>
+          <li class="option-item" data-priority="0" data-value="pta_retained_placenta">
+            <div class="option-content">
+              <span class="label">Retained Placenta ↓</span>
+              <span class="missing">({{ missing_counts.pta_retained_placenta }})</span>
+              <span class="priority"></span>
+            </div>
+            <div class="option-controls">
+              <button type="button" class="priority-btn">+</button>
+              <input type="number" class="threshold" placeholder="Порог">
+            </div>
+          </li>
+          <li class="option-item" data-priority="0" data-value="pta_heifer_livability">
+            <div class="option-content">
+              <span class="label">Heifer Livability ↑</span>
+              <span class="missing">({{ missing_counts.pta_heifer_livability }})</span>
+              <span class="priority"></span>
+            </div>
+            <div class="option-controls">
+              <button type="button" class="priority-btn">+</button>
+              <input type="number" class="threshold" placeholder="Порог">
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="theme-section">
+        <button type="button" class="theme-header">
+          Репродуктивные показатели <span class="arrow">▼</span>
+        </button>
+        <ul class="options-list">
+          <li class="option-item" data-priority="0" data-value="pta_dpr">
+            <div class="option-content">
+              <span class="label">DPR ↑</span>
+              <span class="missing">({{ missing_counts.pta_dpr }})</span>
+              <span class="priority"></span>
+            </div>
+            <div class="option-controls">
+              <button type="button" class="priority-btn">+</button>
+              <input type="number" class="threshold" placeholder="Порог">
+            </div>
+          </li>
+          <li class="option-item" data-priority="0" data-value="pta_hcr">
+            <div class="option-content">
+              <span class="label">HCR ↑</span>
+              <span class="missing">({{ missing_counts.pta_hcr }})</span>
+              <span class="priority"></span>
+            </div>
+            <div class="option-controls">
+              <button type="button" class="priority-btn">+</button>
+              <input type="number" class="threshold" placeholder="Порог">
+            </div>
+          </li>
+          <li class="option-item" data-priority="0" data-value="pta_ccr">
+            <div class="option-content">
+              <span class="label">CCR ↑</span>
+              <span class="missing">({{ missing_counts.pta_ccr }})</span>
+              <span class="priority"></span>
+            </div>
+            <div class="option-controls">
+              <button type="button" class="priority-btn">+</button>
+              <input type="number" class="threshold" placeholder="Порог">
+            </div>
+          </li>
+          <li class="option-item" data-priority="0" data-value="pta_gestation_length">
+            <div class="option-content">
+              <span class="label">Gestation Length ↓</span>
+              <span class="missing">({{ missing_counts.pta_gestation_length }})</span>
+              <span class="priority"></span>
+            </div>
+            <div class="option-controls">
+              <button type="button" class="priority-btn">+</button>
+              <input type="number" class="threshold" placeholder="Порог">
+            </div>
+          </li>
+          <li class="option-item" data-priority="0" data-value="pta_early_first_calving">
+            <div class="option-content">
+              <span class="label">Early First Calving ↑</span>
+              <span class="missing">({{ missing_counts.pta_early_first_calving }})</span>
+              <span class="priority"></span>
+            </div>
+            <div class="option-controls">
+              <button type="button" class="priority-btn">+</button>
+              <input type="number" class="threshold" placeholder="Порог">
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+    
+    <input type="hidden" name="phenotype_order" id="hidden-order">
+    <input type="hidden" name="thresholds" id="hidden-thresholds">
+    <div class="action-buttons">
+      <button type="submit" class="action-btn">Нарисовать график</button>
+      <a href="{% url 'auto_pairing' %}" class="action-btn">Автоматическое разбиение на пары</a>
+    </div>
+  </form>
+</div>
+
+<style>
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  .themes-container {
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .header {
+    color: #2c3e50;
+    margin-bottom: 2rem;
+    text-align: center;
+    font-size: 2.2rem;
+  }
+
+  .theme-section {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  }
+
+  .theme-header {
+    width: 100%;
+    padding: 1rem;
+    background: #3498db;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.1rem;
+    transition: background 0.2s ease;
+  }
+
+  .theme-header:hover {
+    background: #2980b9;
+  }
+
+  .options-list {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0 0 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .options-list.expanded {
+    max-height: 2000px;
+  }
+
+  .option-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.8rem;
+    margin: 0.5rem 0;
+    background: white;
+    border-radius: 6px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    transition: transform 0.2s ease;
+  }
+
+  .option-item:hover {
+    transform: translateX(5px);
+  }
+
+  .option-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .priority-btn {
+    width: 34px;
+    height: 34px;
+    border: none;
+    border-radius: 6px;
+    background: #ffffff;
+    color: #2c3e50;
+    font-size: 1.2rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 
+      0 2px 4px rgba(0,0,0,0.08),
+      inset 0 -1px 1px rgba(0,0,0,0.05);
+  }
+
+  .priority-btn:hover {
+    background: #f1f3f5;
+    box-shadow: 
+      0 3px 6px rgba(0,0,0,0.1),
+      inset 0 -1px 1px rgba(0,0,0,0.1);
+  }
+
+  .priority-btn:active {
+    transform: scale(0.95);
+    box-shadow: 
+      0 1px 2px rgba(0,0,0,0.1),
+      inset 0 1px 1px rgba(0,0,0,0.1);
+  }
+
+  .threshold {
+    width: 90px;
+    padding: 0.4rem;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    text-align: center;
+  }
+
+  .action-buttons {
+    display: flex;
+    gap: 1.5rem;
+    margin-top: 2.5rem;
+    justify-content: center;
+  }
+
+  .action-btn {
+    flex: 1;
+    min-width: 260px;
+    max-width: 300px;
+    padding: 14px 28px;
+    background: #2980b9;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    text-align: center;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    
+  }
+
+  .action-btn:hover {
+    background: #2471a3;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  }
+
+  .action-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 3px rgba(0,0,0,0.1);
+  }
+
+  .missing {
+    color: #6c757d;
+    font-size: 0.85rem;
+  }
+
+  .priority {
+    color: #27ae60;
+    font-weight: 600;
+    min-width: 40px;
+    text-align: right;
+  }
+
+  .arrow {
+    font-size: 0.9em;
+    transition: transform 0.2s ease;
+  }
+</style>
+
+<script>
+  document.querySelectorAll('.theme-header').forEach(header => {
+    header.addEventListener('click', () => {
+      const themeSection = header.closest('.theme-section');
+      const list = themeSection.querySelector('.options-list');
+      const arrow = header.querySelector('.arrow');
+      list.classList.toggle('expanded');
+      arrow.textContent = list.classList.contains('expanded') ? '▲' : '▼';
+    });
+  });
+
+  let globalPriority = 1;
+  document.querySelectorAll('.option-item').forEach(item => {
+    item.addEventListener('click', (e) => {
+      if(e.target.classList.contains('threshold') || e.target.tagName === 'INPUT') return;
+      
+      const priorityBadge = item.querySelector('.priority');
+      const btn = item.querySelector('.priority-btn');
+      const currentPriority = parseInt(item.dataset.priority);
+
+      if(currentPriority === 0) {
+        item.dataset.priority = globalPriority;
+        priorityBadge.textContent = `pr: ${globalPriority}`;
+        btn.textContent = '-';
+        globalPriority++;
+      } else {
+        item.dataset.priority = 0;
+        priorityBadge.textContent = '';
+        btn.textContent = '+';
+        document.querySelectorAll('.option-item').forEach(otherItem => {
+          const p = parseInt(otherItem.dataset.priority);
+          if(p > currentPriority) {
+            otherItem.dataset.priority = p - 1;
+            otherItem.querySelector('.priority').textContent = `pr: ${p - 1}`;
+          }
+        });
+        globalPriority = Math.max(1, globalPriority - 1);
+      }
+
+      const parentList = item.closest('.options-list');
+      const sortedItems = [...parentList.children].sort((a, b) => {
+        const aP = parseInt(a.dataset.priority) || Infinity;
+        const bP = parseInt(b.dataset.priority) || Infinity;
+        return aP - bP;
+      });
+      sortedItems.forEach(i => parentList.appendChild(i));
+      updateHiddenOrderAndThresholds();
+    });
+  });
+
+  document.querySelectorAll('.threshold').forEach(input => {
+    input.addEventListener('input', () => {
+      updateHiddenOrderAndThresholds();
+    });
+  });
+
+  function updateHiddenOrderAndThresholds() {
+    const items = Array.from(document.querySelectorAll('.option-item'));
+    
+    const order = items
+      .filter(item => parseInt(item.dataset.priority) > 0)
+      .sort((a, b) => parseInt(a.dataset.priority) - parseInt(b.dataset.priority))
+      .map(item => item.dataset.value);
+    document.getElementById('hidden-order').value = JSON.stringify(order);
+
+    const thresholds = [];
+    items.forEach(item => {
+      const priority = parseInt(item.dataset.priority);
+      const thresholdInput = item.querySelector('.threshold');
+      const thresholdValue = thresholdInput.value.trim();
+      
+      thresholds.push(
+        priority > 0 && thresholdValue !== '' 
+        ? parseFloat(thresholdValue) 
+        : 'None'
+      );
+    });
+    document.getElementById('hidden-thresholds').value = JSON.stringify(thresholds);
+  }
+</script>
+{% endblock %}
