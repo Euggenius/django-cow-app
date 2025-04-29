@@ -131,8 +131,6 @@ def upload(request):
                 else:
                     messages.success(request, f"Загружено {valid_rows} коров из {row_count} строк файла.")
                 
-                # print(missing_counts)
-                
                 request.session['uploaded_cows'] = uploaded_cows
                 request.session['missing_counts'] = missing_counts
 
@@ -665,7 +663,7 @@ def auto_pairing(request):
         
         try:
             uploaded_cows = request.session.get('uploaded_cows', {})
-            print(f"Загружено коров из сессии: {len(uploaded_cows)}")
+            # print(f"Загружено коров из сессии: {len(uploaded_cows)}")
             
             valid_cows_ancestors_list = []
             for cow_id, ancestors_ids in uploaded_cows.items():
@@ -779,5 +777,5 @@ def reset_priorities(request):
         del request.session['current_pareto']
     request.session.modified = True
     
-    messages.info(request, "Приоритеты были сброшены.")
+    # messages.info(request, "Приоритеты были сброшены.")
     return redirect('sort_bulls')

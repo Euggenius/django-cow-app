@@ -36,7 +36,7 @@
                 <h3 class="bull-name">{{ bull.registered_name }}</h3>
                 
                 <div class="traits">
-                    {% for trait in original_order|slice:":3" %}
+                    {% for trait in original_order %}
                     <div class="trait-row">
                         <span class="trait-label">{{ trait|slice:"4:" }}</span>
                         <span class="trait-value">{{ bull|get_item:trait|floatformat:2 }}</span>
@@ -306,16 +306,16 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         selectedCount = 0;
         counter.textContent = selectedCount;
-        submitBtn.disabled = true;
+        submitBtn.disabled = selectedCount < 1 || selectedCount > 5;;
     });
 
     form.addEventListener('submit', function(e) {
         const isPlotAction = e.submitter?.value === 'plot';
         
         if (isPlotAction) {
-            if (selectedCount !== 5) {
+            if (selectedCount < 1 || selectedCount > 5) {
                 e.preventDefault();
-                alert('Пожалуйста, выберите ровно 5 быков');
+                alert('Пожалуйста, выберите до 5 быков');
             } else {
                 submitBtn.disabled = true;
                 submitBtn.innerHTML = '<div class="loader"></div>';
