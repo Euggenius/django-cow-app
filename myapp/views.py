@@ -589,7 +589,7 @@ def plot_results(request):
         config = {
             "scrollZoom": True,
             "displaylogo": False,
-            "modeBarButtonsToRemove": ["zoom", "zoomIn", "zoomOut", "autoScale", "toImage", "pan2d"]
+            "modeBarButtonsToRemove": ["zoom", "zoomIn", "zoomOut", "autoScale", "toImage", "pan2d", "resetScale2d"],
         }
 
         fig.update_xaxes(showgrid=True, gridwidth=1, gridcolor='rgba(0, 0, 0, 0.2)')
