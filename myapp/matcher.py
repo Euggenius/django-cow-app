@@ -8,14 +8,14 @@ from collections import defaultdict
 
 # Net Merit indexes
 ECONOMIC_WEIGHTS_S = {
-    'pta_milk': 3.2,
-    'pta_fat': 31.8,
-    'pta_protein': 13.0,
-    'pta_productive_life': 13.0,
-    'pta_scs': -2.6,
-    'pta_dpr': 2.1,
-    'pta_hcr': 0.5,
-    'pta_ccr': 1.8,
+    'pta_milk': 0.32,
+    'pta_fat': 3.18,
+    'pta_protein': 1.3,
+    'pta_productive_life': 1.3,
+    'pta_scs': -0.26,
+    'pta_dpr': 0.21,
+    'pta_hcr': 0.05,
+    'pta_ccr': 0.18,
     'pta_gestation_length': 0.0,
     'pta_milk_fever': 0.0,
     'pta_displaced_abomasum': 0.0,
@@ -23,13 +23,13 @@ ECONOMIC_WEIGHTS_S = {
     'pta_mastitis': 0.0,
     'pta_metritis': 0.0,
     'pta_retained_placenta': 0.0,
-    'pta_early_first_calving': 1.0,
-    'pta_heifer_livability': 0.8,
+    'pta_early_first_calving': 0.1,
+    'pta_heifer_livability': 0.08,
     'pta_feed_saved': 0.0,
-    'pta_residual_feed_intake': -6.8
+    'pta_residual_feed_intake': -0.68
 }
 
-COST_PER_BULL_O = 50.0
+COST_PER_BULL_O = 500.0
 PTA_KEYS = list(ECONOMIC_WEIGHTS_S.keys())
 
 def print_progress_bar(iteration, total, prefix='', suffix='', length=50, fill='█'):
@@ -269,7 +269,6 @@ def run_optimal_pairing(all_bulls_qs, valid_cows_ancestors, N_target, B_budget, 
     
     num_cows = len(valid_cows_ancestors)
     if num_cows > 1000:
-        u_candidate_pool_size = min(u_candidate_pool_size, 1000)
         print(f"Большое количество коров ({num_cows}), уменьшаем пул кандидатов до {u_candidate_pool_size}")
     
     candidates = select_candidate_bulls(all_bulls_qs, ECONOMIC_WEIGHTS_S, u_candidate_pool_size)
@@ -293,4 +292,4 @@ def run_optimal_pairing(all_bulls_qs, valid_cows_ancestors, N_target, B_budget, 
         
     assignments, net_profit = execute_greedy_heap_selection(potential, N_target, B_budget, COST_PER_BULL_O)
     print("--- Оптимальный подбор завершен --- ")
-    return assignments, net_profit
+    return assignments, round(net_profit,3)
